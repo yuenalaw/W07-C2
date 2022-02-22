@@ -6,6 +6,7 @@ typedef union {
         //char word[MAX_WORD_LEN + 1];
         char* word;
         int frequency;
+        FrequencyRecord* next;
     } wordStruct;
 } recordUnion;
 
@@ -33,6 +34,6 @@ can create a new record for a given word
 typedef void (*FrequencyRecord_setIsWord)(FrequencyRecord*,bool);
 typedef char (*FrequencyRecord_getLetter)(FrequencyRecord*);
 typedef void (*FrequencyRecord_setChild)(FrequencyRecord*,FrequencyRecord*);
-typedef bool (*FrequencyRecord_isChild)(FrequencyRecord*,FrequencyRecord*);
+typedef bool (*FrequencyRecord_isChild)(FrequencyRecord*,char);
 typedef void (*FrequencyRecord_setWord)(FrequencyRecord*,char);
 typedef void (*FrequencyRecord_free)(FrequencyRecord*);
