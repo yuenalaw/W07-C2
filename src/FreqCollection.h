@@ -8,4 +8,4 @@ typedef struct FreqCollection {
     FrequencyRecord *last;
 } FreqCollection;
 
-typedef void (*FreqCollection_insert)(FreqCollection*,FrequencyRecord*,FreqCollection*);
+typedef void (*FreqCollection_insert)(FreqCollection*,char*,FreqCollection*);
