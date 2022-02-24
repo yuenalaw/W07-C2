@@ -1,5 +1,4 @@
 #include "FreqCollection.h"
-#include "FrequencyRecord.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
@@ -9,8 +8,8 @@ void writeData(FILE *fp, FreqCollection *fc) {
     //loop through the collection and fprintf each
     //first check if we actually have any words
     FrequencyRecord *curr;
-    if (fc->head->record->wordStruct.next){
-        curr = fc->head->record->wordStruct.next;  
+    if (fc->head->next){
+        curr = fc->head->next;  
     } else {
         printf("No words found.");
         exit(1);
@@ -22,8 +21,8 @@ void writeData(FILE *fp, FreqCollection *fc) {
         fprintf(fp,"%s, %d",curr->record->wordStruct.word,curr->record->wordStruct.frequency);
         currWord += 1;
         //check if the curr is the last word
-        if (curr->record->wordStruct.next) {
-            curr = curr->record->wordStruct.next;
+        if (curr->next) {
+            curr = curr->next;
         } else {
             break;
         }
@@ -42,19 +41,19 @@ void writeToFile(char *filename, FreqCollection *fc) {
 
 void readData(FILE *fp,FreqCollection *fc) {
     while (feof(fp) != 0) { //returns a non 0 int if stream is at end of file
-        char word[] = "\n";
+        char word[] = "";
         while (true) {
             char character = fgetc(fp);
-            if (character != EOF && character != "\n" && isalpha(character)) {
+            if (character != EOF && strcmp("\n",&character) != 0 && isalpha(character)) {
                 character = tolower(character);
-                strcat(word,character);
+                strcat(word,&character);
             } else {
                 break;
             }
         }
         //add word to collection, only if word is non-empty
-        if (word) {
-            insert(fc,word,(int) sizeof(word));
+        if (strcmp(word,"") != 0) {
+            fc->insert(fc,word,(int) sizeof(word));
         }
     }
 }

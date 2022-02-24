@@ -6,22 +6,13 @@
 #include <stdbool.h>
 
 
-// struct FrequencyRecord {
-//     bool isWord;
-//     char letter;
-//     FrequencyRecord* children[26]; /* 26 letters in the alphabet*/
-//     int childrenSize;
-//     FrequencyRecord* parent;
-//     recordUnion* record;
-// };
-
 //static ("private") functions not directly visible to code outside this file
 //but we can call them using the pointers to functions inside the Person struct
 static void FrequencyRecord_setIsWord(FrequencyRecord *this, bool isWord) {
     ((FrequencyRecord*)this) -> isWord = isWord;
 }
 
-static char FrequencyRecord_getLetter(FrequencyRecord *this) {
+static char* FrequencyRecord_getLetter(FrequencyRecord *this) {
     return ((FrequencyRecord*)this) -> letter;
 }
 
@@ -32,27 +23,28 @@ static void FrequencyRecord_setChild(FrequencyRecord *parent,FrequencyRecord *ne
     ((FrequencyRecord*)newChild)->parent = parent;
 }
 
+/* assume there is an "isChild" check before calling this funciton */
+static FrequencyRecord* FrequencyRecord_getChild(FrequencyRecord *parent, char *letter) {
+    int childrenSize = ((FrequencyRecord*)parent)->childrenSize;
+    for (int i=0;i<childrenSize;i++){
+        if (((FrequencyRecord*)parent)->children[i]->letter == letter){
+            return ((FrequencyRecord*)parent)->children[i];
+        }
+    }
+    return NULL;
+}
+
 static bool FrequencyRecord_isChild(FrequencyRecord *parent,char letter){
     int childrenSize = ((FrequencyRecord*)parent)->childrenSize;
     for (int i=0;i<childrenSize;i++){
-        if (getLetter(parent->children[i]) == letter){
+        if (parent->getLetter(parent->children[i]) == &letter){
             return true;
         }
     }
     return false;
 }
 
-/* assume there is an "isChild" check before calling this funciton */
-static FrequencyRecord* FrequencyRecord_getChild(FrequencyRecord *parent, char letter) {
-        int childrenSize = ((FrequencyRecord*)parent)->childrenSize;
-    for (int i=0;i<childrenSize;i++){
-        if (((FrequencyRecord*)parent)->children[i]->letter == letter){
-            return ((FrequencyRecord*)parent)->children[i];
-        }
-    }
-}
-
-static void FrequencyRecord_setWord(FrequencyRecord *this,const char *userWord) {
+static void FrequencyRecord_setWord(FrequencyRecord *this,char *userWord) {
     if (((FrequencyRecord*)this)->isWord == false){
         ((FrequencyRecord*)this)->record->wordStruct.frequency = 0;
         ((FrequencyRecord*)this)->record->wordStruct.word = strdup(userWord);
@@ -72,13 +64,13 @@ static void FrequencyRecord_free(FrequencyRecord *this) {
 }
 
 //non-static ("public") constructor
-FrequencyRecord *new_FrequencyRecord(char letter){
+FrequencyRecord *new_FrequencyRecord(char *letter){
     FrequencyRecord *this = malloc(sizeof(FrequencyRecord));
     init_FrequencyRecord(this,letter);
     return (FrequencyRecord*) this;
 }
 
-void init_FrequencyRecord(FrequencyRecord *this, const char letter) {
+void init_FrequencyRecord(FrequencyRecord *this, char *letter) {
     this->letter = letter;
     this->childrenSize = 0;
     this->setIsWord = FrequencyRecord_setIsWord;

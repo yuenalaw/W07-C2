@@ -4,13 +4,6 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-struct FreqCollection {
-    FrequencyRecord *head;
-    FreqCollection_insert insert;
-    FrequencyRecord *last;
-    int uniqueWords;
-};
-
 //static ("private") functions
 /*
 update collection for a given word
@@ -22,26 +15,26 @@ update collection for a given word
 only if it's a word, do we insert to collection
 */
 
-static void insert(FreqCollection *this, char* word, int wordSize){
+static void FreqCollection_insert(FreqCollection *this, char* word, int wordSize){
     //traverse the graph
     FrequencyRecord *prev = this->head;
     for (int i=0; i<wordSize; i++) {
         FrequencyRecord *childNode;
 
-        if (isChild(prev,word[i])){
-            childNode = getChild(prev,word[i]);
+        if (prev->isChild(prev,word[i])){
+            childNode = prev->getChild(prev,word[i]);
         } else {
-            childNode = new_FrequencyRecord(word[i]);
-            setChild(prev,childNode);
+            childNode = new_FrequencyRecord(&word[i]);
+            childNode->setChild(prev,childNode);
         }
 
         if (i==wordSize-1){ //last letter, i.e. a word
             if (!(childNode->isWord)){ //if not already a word
                 //add to the end of our list of words
-                this->last->record->wordStruct.next = childNode;
+                this->last->next = childNode;
                 this->uniqueWords += 1;
             }
-            setWord(childNode,word);
+            childNode->setWord(childNode,word);
         }
 
         //traverse graph
@@ -52,7 +45,13 @@ static void insert(FreqCollection *this, char* word, int wordSize){
 //non-static ("public") constructor
 FreqCollection *new_FreqCollection() {
     FreqCollection *this = malloc(sizeof(FreqCollection));
+    init_FreqCollection(this);
+    return this;
+}
+
+void init_FreqCollection(FreqCollection *this) {
     this->head = new_FrequencyRecord(NULL);
     this->last = this->head;
     this->uniqueWords = 0;
+    this->insert = FreqCollection_insert;
 }
