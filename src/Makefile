@@ -2,7 +2,7 @@ CC = clang
 RM = rm -f
 DFLAG = -g
 GFLAGS = -Wall -Wextra
-CFLAGS = $(DFLAG) $)GFLAGS -c 
+CFLAGS = $(DFLAG) $(GFLAGS) -c 
 LFLAGS = $(DFLAG) $(GFLAGS)
 
 RunCounter: RunCounter.o FreqCollection.o FrequencyRecord.o
