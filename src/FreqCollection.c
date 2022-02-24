@@ -8,6 +8,7 @@ struct FreqCollection {
     FrequencyRecord *head;
     FreqCollection_insert insert;
     FrequencyRecord *last;
+    int uniqueWords;
 };
 
 //static ("private") functions
@@ -23,41 +24,35 @@ only if it's a word, do we insert to collection
 
 static void insert(FreqCollection *this, char* word, int wordSize){
     //traverse the graph
-    FrequencyRecord *curr;
     FrequencyRecord *prev = this->head;
     for (int i=0; i<wordSize; i++) {
         FrequencyRecord *childNode;
-        if (i==wordSize-1) { //the last letter, aka end of word
-           //check if already exists
-            if (isChild(prev,word[i])) {
-                childNode = getChild(prev,word[i]);
-                //check if that node is already a word
-                if (!(childNode->isWord)){
-                    //add to the end of our list of words
-                    this->last->record->wordStruct.next = childNode;
-                }
-            } else {
-                //make a new one
-                childNode = new_FrequencyRecord(word[i],true);
-                setChild(prev,childNode);
-                //connect to the last word, if the word is unseen
+
+        if (isChild(prev,word[i])){
+            childNode = getChild(prev,word[i]);
+        } else {
+            childNode = new_FrequencyRecord(word[i]);
+            setChild(prev,childNode);
+        }
+
+        if (i==wordSize-1){ //last letter, i.e. a word
+            if (!(childNode->isWord)){ //if not already a word
+                //add to the end of our list of words
                 this->last->record->wordStruct.next = childNode;
+                this->uniqueWords += 1;
             }
             setWord(childNode,word);
-            break; //finish the loop
-        } //otherwise...
-        if (isChild(prev,word[i])) {
-            curr = getChild(prev,word[i]);
-        } else { //i.e. not already a child
-            curr = new_FrequencyRecord(word[i],false);
-            setChild(prev,curr);
         }
-        prev = curr;
+
+        //traverse graph
+        prev = childNode;
     }
 }
 
 //non-static ("public") constructor
 FreqCollection *new_FreqCollection() {
     FreqCollection *this = malloc(sizeof(FreqCollection));
-    this->head = new_FrequencyRecord(NULL,true);
+    this->head = new_FrequencyRecord(NULL);
+    this->last = this->head;
+    this->uniqueWords = 0;
 }

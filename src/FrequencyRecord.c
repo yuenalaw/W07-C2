@@ -41,7 +41,7 @@ static void setChild(FrequencyRecord *parent,FrequencyRecord *newChild) {
 static bool isChild(FrequencyRecord *parent,char letter){
     int childrenSize = ((FrequencyRecord*)parent)->childrenSize;
     for (int i=0;i<childrenSize;i++){
-        if (((FrequencyRecord*)parent)->children[i]->letter == letter){
+        if (getLetter(parent->children[i]) == letter){
             return true;
         }
     }
@@ -63,10 +63,11 @@ static void setWord(FrequencyRecord *this,const char *userWord) {
         ((FrequencyRecord*)this)->record->wordStruct.frequency = 0;
         //strcpy(((FrequencyRecord*)this)->record->wordStruct.word,userWord);
         ((FrequencyRecord*)this)->record->wordStruct.word = strdup(userWord);
+        ((FrequencyRecord*)this)->setIsWord(this,true);
         //strdup creates a malloc!
     } //otherwise we just add 1 to frequency
     ((FrequencyRecord*)this)->record->wordStruct.frequency += 1;
-    ((FrequencyRecord*)this)->setIsWord(this,true);
+    
 }
 
 static void free(FrequencyRecord *this) {
@@ -78,9 +79,9 @@ static void free(FrequencyRecord *this) {
 }
 
 //non-static ("public") constructor
-FrequencyRecord *new_FrequencyRecord(char letter,bool isWord){
+FrequencyRecord *new_FrequencyRecord(char letter){
     FrequencyRecord *this = malloc(sizeof(FrequencyRecord));
     this -> letter = letter;
-    this -> setIsWord(this,isWord);
+    this -> childrenSize = 0;
     return (FrequencyRecord*) this;
 }
