@@ -6,39 +6,33 @@
 #include <stdbool.h>
 
 
-struct FrequencyRecord {
-    bool isWord;
-    char letter;
-    FrequencyRecord* children[26]; /* 26 letters in the alphabet*/
-    int childrenSize;
-    FrequencyRecord* parent;
-    recordUnion* record;
-    FrequencyRecord_setIsWord setIsWord;
-    FrequencyRecord_getLetter getLetter;
-    FrequencyRecord_setWord setWord;
-    FrequencyRecord_setChild getChild;
-    FrequencyRecord_isChild isChild;
-    FrequencyRecord_free free;
-};
+// struct FrequencyRecord {
+//     bool isWord;
+//     char letter;
+//     FrequencyRecord* children[26]; /* 26 letters in the alphabet*/
+//     int childrenSize;
+//     FrequencyRecord* parent;
+//     recordUnion* record;
+// };
 
 //static ("private") functions not directly visible to code outside this file
 //but we can call them using the pointers to functions inside the Person struct
-static void setIsWord(FrequencyRecord *this, bool isWord) {
+static void FrequencyRecord_setIsWord(FrequencyRecord *this, bool isWord) {
     ((FrequencyRecord*)this) -> isWord = isWord;
 }
 
-static char getLetter(FrequencyRecord *this) {
+static char FrequencyRecord_getLetter(FrequencyRecord *this) {
     return ((FrequencyRecord*)this) -> letter;
 }
 
-static void setChild(FrequencyRecord *parent,FrequencyRecord *newChild) {
+static void FrequencyRecord_setChild(FrequencyRecord *parent,FrequencyRecord *newChild) {
     int freeIndex = ((FrequencyRecord*)parent)->childrenSize;
     ((FrequencyRecord*)parent)->children[freeIndex] = newChild;
     ((FrequencyRecord*)parent)->childrenSize += 1;
     ((FrequencyRecord*)newChild)->parent = parent;
 }
 
-static bool isChild(FrequencyRecord *parent,char letter){
+static bool FrequencyRecord_isChild(FrequencyRecord *parent,char letter){
     int childrenSize = ((FrequencyRecord*)parent)->childrenSize;
     for (int i=0;i<childrenSize;i++){
         if (getLetter(parent->children[i]) == letter){
@@ -49,7 +43,7 @@ static bool isChild(FrequencyRecord *parent,char letter){
 }
 
 /* assume there is an "isChild" check before calling this funciton */
-static FrequencyRecord* getChild(FrequencyRecord *parent, char letter) {
+static FrequencyRecord* FrequencyRecord_getChild(FrequencyRecord *parent, char letter) {
         int childrenSize = ((FrequencyRecord*)parent)->childrenSize;
     for (int i=0;i<childrenSize;i++){
         if (((FrequencyRecord*)parent)->children[i]->letter == letter){
@@ -58,10 +52,9 @@ static FrequencyRecord* getChild(FrequencyRecord *parent, char letter) {
     }
 }
 
-static void setWord(FrequencyRecord *this,const char *userWord) {
+static void FrequencyRecord_setWord(FrequencyRecord *this,const char *userWord) {
     if (((FrequencyRecord*)this)->isWord == false){
         ((FrequencyRecord*)this)->record->wordStruct.frequency = 0;
-        //strcpy(((FrequencyRecord*)this)->record->wordStruct.word,userWord);
         ((FrequencyRecord*)this)->record->wordStruct.word = strdup(userWord);
         ((FrequencyRecord*)this)->setIsWord(this,true);
         //strdup creates a malloc!
@@ -70,7 +63,7 @@ static void setWord(FrequencyRecord *this,const char *userWord) {
     
 }
 
-static void free(FrequencyRecord *this) {
+static void FrequencyRecord_free(FrequencyRecord *this) {
     //need to free the word
     if (this->isWord){
         free(((FrequencyRecord*)this)->record->wordStruct.word);
@@ -81,7 +74,17 @@ static void free(FrequencyRecord *this) {
 //non-static ("public") constructor
 FrequencyRecord *new_FrequencyRecord(char letter){
     FrequencyRecord *this = malloc(sizeof(FrequencyRecord));
-    this -> letter = letter;
-    this -> childrenSize = 0;
+    init_FrequencyRecord(this,letter);
     return (FrequencyRecord*) this;
+}
+
+void init_FrequencyRecord(FrequencyRecord *this, const char letter) {
+    this->letter = letter;
+    this->childrenSize = 0;
+    this->setIsWord = FrequencyRecord_setIsWord;
+    this->getLetter = FrequencyRecord_getLetter;
+    this->setChild = FrequencyRecord_setChild;
+    this->isChild = FrequencyRecord_isChild;
+    this->setWord = FrequencyRecord_setWord;
+    this->free = FrequencyRecord_free;
 }
