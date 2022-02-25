@@ -16,30 +16,35 @@ only if it's a word, do we insert to collection
 */
 
 static void FreqCollection_insert(FreqCollection *this, char* word, int wordSize){
+
+    printf("%s : %d \n",word,wordSize);
     //traverse the graph
     FrequencyRecord *prev = this->head;
-    for (int i=0; i<wordSize; i++) {
-        FrequencyRecord *childNode;
-
-        if (prev->isChild(prev,word[i])){
-            childNode = prev->getChild(prev,word[i]);
-        } else {
-            childNode = new_FrequencyRecord(&word[i]);
-            childNode->setChild(prev,childNode);
-        }
-
-        if (i==wordSize-1){ //last letter, i.e. a word
-            if (!(childNode->isWord)){ //if not already a word
-                //add to the end of our list of words
-                this->last->next = childNode;
-                this->uniqueWords += 1;
-            }
-            childNode->setWord(childNode,word);
-        }
-
-        //traverse graph
-        prev = childNode;
+    for (int i=0; i<wordSize; i++){
+        printf("%s",&word[i]);
     }
+    // for (int i=0; i<wordSize; i++) {
+    //     FrequencyRecord *childNode;
+
+    //     if (prev->isChild(prev,word[i])){
+    //         childNode = prev->getChild(prev,word[i]);
+    //     } else {
+    //         childNode = new_FrequencyRecord(&word[i]);
+    //         childNode->setChild(prev,childNode);
+    //     }
+
+    //     if (i==wordSize-1){ //last letter, i.e. a word
+    //         if (!(childNode->isWord)){ //if not already a word
+    //             //add to the end of our list of words
+    //             this->last->next = childNode;
+    //             this->uniqueWords += 1;
+    //         }
+    //         childNode->setWord(childNode,word);
+    //     }
+
+    //     //traverse graph
+    //     prev = childNode;
+    // }
 }
 
 //non-static ("public") constructor

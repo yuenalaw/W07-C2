@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <string.h>
 
 void writeData(FILE *fp, FreqCollection *fc) {
     fprintf(fp,"Word, Frequency\n");
@@ -40,22 +41,31 @@ void writeToFile(char *filename, FreqCollection *fc) {
 }
 
 void readData(FILE *fp,FreqCollection *fc) {
-    while (feof(fp) != 0) { //returns a non 0 int if stream is at end of file
-        char word[] = "";
-        while (true) {
-            char character = fgetc(fp);
-            if (character != EOF && strcmp("\n",&character) != 0 && isalpha(character)) {
-                character = tolower(character);
-                strcat(word,&character);
-            } else {
-                break;
+    fseek(fp,0,SEEK_END);
+    long f_size = ftell(fp);
+    fseek(fp,0,SEEK_SET);
+    char *code = malloc(f_size);
+    size_t n = 0;
+    int c;
+    char str[50];
+
+    while ((c=fgetc(fp)) != EOF) {
+        code[n++] = (char) c;
+        if (fscanf(fp, "%49[a-zA-Z]",str) == 1) { //49 to prevent buffer overflow - one less than size of array
+            //word now in str
+            //make lowercase
+            int i=0;
+            for (i=0; str[i]; i++) {
+                str[i] = tolower(str[i]);
             }
-        }
-        //add word to collection, only if word is non-empty
-        if (strcmp(word,"") != 0) {
-            fc->insert(fc,word,(int) sizeof(word));
+            fc->insert(fc,str,i);
+            //memset(str,0,i*sizeof(char));
+            strcpy(str,"");
         }
     }
+
+    code[n] = "\n";
+    free(code);
 }
 
 void readFile(char *filename,FreqCollection *fc){
@@ -69,7 +79,7 @@ void readFile(char *filename,FreqCollection *fc){
 }
 
 int main(int argc, char **argv) {
-    if (argc < 3) {
+    if (argc != 3) {
         printf("Usage: %s <filename>\n",argv[0]);
         exit(1);
     }
