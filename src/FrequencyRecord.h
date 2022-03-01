@@ -13,18 +13,18 @@ union recordUnion{
 };
 
 struct FrequencyRecord {
-    bool isWord;
-    char *letter;
+    int isWord;
+    char letter;
     FrequencyRecord* children[26]; /* 26 letters in the alphabet*/
     int childrenSize;
     FrequencyRecord* parent;
     recordUnion* record;
     FrequencyRecord* next;
 
-    void (*setIsWord)(FrequencyRecord*,bool);
-    char* (*getLetter)(FrequencyRecord*);
+    void (*setIsWord)(FrequencyRecord*,int);
+    char (*getLetter)(FrequencyRecord*);
     void (*setChild)(FrequencyRecord*,FrequencyRecord*);
-    bool (*isChild)(FrequencyRecord*,char);
+    int (*isChild)(FrequencyRecord*,char);
     FrequencyRecord* (*getChild)(FrequencyRecord*,char);
     void (*setWord)(FrequencyRecord*,char *);
     void (*free)(FrequencyRecord*);
@@ -38,5 +38,5 @@ can create a new record for a given word
 */
 
 
-FrequencyRecord *new_FrequencyRecord(char *letter);
-void init_FrequencyRecord(FrequencyRecord *thiss, char *letter);
+FrequencyRecord *new_FrequencyRecord(char letter);
+void init_FrequencyRecord(FrequencyRecord *thiss, char letter);

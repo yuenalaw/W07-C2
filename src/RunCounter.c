@@ -10,7 +10,7 @@ void writeData(FILE *fp, FreqCollection *fc) {
     //first check if we actually have any words
     FrequencyRecord *curr;
     if (fc->head->next){
-        curr = fc->head->next;  
+        curr = fc->head->next;
     } else {
         printf("No words found.");
         exit(1);
@@ -55,16 +55,14 @@ void readData(FILE *fp,FreqCollection *fc) {
             //word now in str
             //make lowercase
             int i=0;
-            for (i=0; str[i]; i++) {
+            for (i=0;str[i];i++){
                 str[i] = tolower(str[i]);
             }
             fc->insert(fc,str,i);
-            //memset(str,0,i*sizeof(char));
-            strcpy(str,"");
         }
     }
 
-    code[n] = "\n";
+    code[n] = (char)0;
     free(code);
 }
 
