@@ -17,19 +17,15 @@ only if it's a word, do we insert to collection
 
 static void FreqCollection_insert(FreqCollection *this, char* word, int wordSize){
 
-    //printf("%s : %d \n",word,wordSize);
     //traverse the graph
     FrequencyRecord *prev = this->head;
 
     for (int i=0; i<wordSize; i++) {
         char letter = word[i];
-        printf("%c\n",letter);
         FrequencyRecord *childNode = NULL;
         int isAChild = prev->isChild(prev,letter);
-        printf("%i\n",isAChild);
         if (isAChild == 1) {
             childNode = prev->getChild(prev,letter);
-            printf("Made it here!\t%c",childNode->getLetter(childNode));
         } else {
             childNode = new_FrequencyRecord(letter);
             prev->setChild(prev,childNode);
@@ -37,21 +33,16 @@ static void FreqCollection_insert(FreqCollection *this, char* word, int wordSize
 
         if (i==wordSize-1){ //last letter, i.e. a word
             int checkIsWord = childNode->isWord;
-            printf("A word?: %i\n",checkIsWord);
             if (checkIsWord == 0){ //if not already a word
                 //add to the end of our list of words
-                printf("Creating a word!");
                 this->last->next = childNode;
                 this->last = childNode;
                 this->uniqueWords++;
-                printf("unique words: %i",this->uniqueWords);
                 childNode->createWord(childNode,word);
                 //strdup creates a malloc!
             }
             ++childNode->frequency;
-            printf("%i\n",childNode->frequency);
         }
-        printf("I'm here\t%c\n",childNode->getLetter(childNode));
         //traverse graph
         prev = childNode;
     }

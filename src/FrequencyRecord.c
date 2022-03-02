@@ -46,7 +46,6 @@ static int FrequencyRecord_isChild(FrequencyRecord *parent,char letter){
 }
 
 static void FrequencyRecord_createWord(FrequencyRecord *this,char userWord[]) {
-    printf("djsjfsf");
     //((FrequencyRecord*)this)->record->wordStruct->frequency = 0;
     //((FrequencyRecord*)this)->record->wordStruct->word = userWord;
     strcpy(this->word,userWord);
