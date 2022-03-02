@@ -4,13 +4,13 @@
 typedef union recordUnion recordUnion;
 typedef struct FrequencyRecord FrequencyRecord;
 
-union recordUnion{
-    struct {
-        //char word[MAX_WORD_LEN + 1];
-        char* word;
-        int frequency;
-    } wordStruct;
-};
+// union recordUnion{
+//     struct {
+//         char word[MAX_WORD_LEN + 1];
+//         //char* word;
+//         int frequency;
+//     } *wordStruct;
+// };
 
 struct FrequencyRecord {
     int isWord;
@@ -18,15 +18,17 @@ struct FrequencyRecord {
     FrequencyRecord* children[26]; /* 26 letters in the alphabet*/
     int childrenSize;
     FrequencyRecord* parent;
-    recordUnion* record;
+    // recordUnion* record;
     FrequencyRecord* next;
+    char word[MAX_WORD_LEN + 1];
+    int frequency;
 
     void (*setIsWord)(FrequencyRecord*,int);
     char (*getLetter)(FrequencyRecord*);
     void (*setChild)(FrequencyRecord*,FrequencyRecord*);
     int (*isChild)(FrequencyRecord*,char);
     FrequencyRecord* (*getChild)(FrequencyRecord*,char);
-    void (*setWord)(FrequencyRecord*,char *);
+    void (*createWord)(FrequencyRecord*,char *);
     void (*free)(FrequencyRecord*);
 
 };

@@ -45,21 +45,19 @@ static int FrequencyRecord_isChild(FrequencyRecord *parent,char letter){
     return 0;
 }
 
-static void FrequencyRecord_setWord(FrequencyRecord *this,char *userWord) {
-    if (((FrequencyRecord*)this)->isWord == false){
-        ((FrequencyRecord*)this)->record->wordStruct.frequency = 0;
-        ((FrequencyRecord*)this)->record->wordStruct.word = strdup(userWord);
-        ((FrequencyRecord*)this)->setIsWord(this,1);
-        //strdup creates a malloc!
-    } //otherwise we just add 1 to frequency
-    ((FrequencyRecord*)this)->record->wordStruct.frequency += 1;
-    
+static void FrequencyRecord_createWord(FrequencyRecord *this,char userWord[]) {
+    printf("djsjfsf");
+    //((FrequencyRecord*)this)->record->wordStruct->frequency = 0;
+    //((FrequencyRecord*)this)->record->wordStruct->word = userWord;
+    strcpy(this->word,userWord);
+    ((FrequencyRecord*)this)->setIsWord(this,1);
 }
 
 static void FrequencyRecord_free(FrequencyRecord *this) {
     //need to free the word
-    if (this->isWord){
-        free(((FrequencyRecord*)this)->record->wordStruct.word);
+    if (this->isWord == 1){
+        //free(((FrequencyRecord*)this)->record->wordStruct->word);
+        free(((FrequencyRecord*)this)->word);
     }
     // //free all the children
     // for (int i=0; i<this->childrenSize;i++){
@@ -84,7 +82,8 @@ void init_FrequencyRecord(FrequencyRecord *this, char letter) {
     this->getChild = FrequencyRecord_getChild;
     this->setChild = FrequencyRecord_setChild;
     this->isChild = FrequencyRecord_isChild;
-    this->setWord = FrequencyRecord_setWord;
+    this->createWord = FrequencyRecord_createWord;
     this->next=NULL;
+    this->frequency = 0;
     this->free = FrequencyRecord_free;
 }

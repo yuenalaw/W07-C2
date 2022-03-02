@@ -19,7 +19,8 @@ void writeData(FILE *fp, FreqCollection *fc) {
     int numUniqueWords = fc->uniqueWords;
     int currWord = 0;
     while (currWord <= numUniqueWords) {
-        fprintf(fp,"%s, %d",curr->record->wordStruct.word,curr->record->wordStruct.frequency);
+        //fprintf(fp,"%s, %d",curr->record->wordStruct->word,curr->record->wordStruct->frequency);
+        fprintf(fp,"%s, %d\n",curr->word,curr->frequency);
         currWord += 1;
         //check if the curr is the last word
         if (curr->next) {

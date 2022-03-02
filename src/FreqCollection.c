@@ -43,11 +43,14 @@ static void FreqCollection_insert(FreqCollection *this, char* word, int wordSize
                 printf("Creating a word!");
                 this->last->next = childNode;
                 this->last = childNode;
-                this->uniqueWords += 1;
+                this->uniqueWords++;
+                printf("unique words: %i",this->uniqueWords);
+                childNode->createWord(childNode,word);
+                //strdup creates a malloc!
             }
-            childNode->setWord(childNode,word);
+            ++childNode->frequency;
+            printf("%i\n",childNode->frequency);
         }
-
         printf("I'm here\t%c\n",childNode->getLetter(childNode));
         //traverse graph
         prev = childNode;
