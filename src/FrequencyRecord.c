@@ -53,15 +53,10 @@ static void FrequencyRecord_createWord(FrequencyRecord *this,char userWord[]) {
 }
 
 static void FrequencyRecord_free(FrequencyRecord *this) {
-    //need to free the word
+    //use of strcpy for the word, which made use of malloc. 
     if (this->isWord == 1){
-        //free(((FrequencyRecord*)this)->record->wordStruct->word);
         free(((FrequencyRecord*)this)->word);
     }
-    // //free all the children
-    // for (int i=0; i<this->childrenSize;i++){
-    //     free(this->children[i]);
-    // }
     free(this);
 }
 

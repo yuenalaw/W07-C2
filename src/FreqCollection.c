@@ -48,6 +48,10 @@ static void FreqCollection_insert(FreqCollection *this, char* word, int wordSize
     }
 }
 
+static void FreqCollection_free(FrequencyRecord *this) {
+    this->free(this);
+}
+
 //non-static ("public") constructor
 FreqCollection *new_FreqCollection() {
     FreqCollection *this = malloc(sizeof(FreqCollection));
@@ -60,4 +64,5 @@ void init_FreqCollection(FreqCollection *this) {
     this->last = this->head;
     this->uniqueWords = 0;
     this->insert = FreqCollection_insert;
+    this->free = FreqCollection_free;
 }
