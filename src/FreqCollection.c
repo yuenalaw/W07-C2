@@ -48,8 +48,19 @@ static void FreqCollection_insert(FreqCollection *this, char* word, int wordSize
     }
 }
 
-static void FreqCollection_free(FrequencyRecord *this) {
-    this->free(this);
+static void FreqCollection_free(FreqCollection *this,FrequencyRecord* fr){
+    int childrenSize = fr->childrenSize;
+    if (childrenSize == 0){ //end of graph
+        fr->free(fr);
+        return;
+    }
+    for (int i=0;i<childrenSize;i++){
+        this->free(this,fr->children[i]);
+    }
+}
+
+static void FreqCollection_freeFinal(FreqCollection *this){
+    free(this);
 }
 
 //non-static ("public") constructor
@@ -65,4 +76,5 @@ void init_FreqCollection(FreqCollection *this) {
     this->uniqueWords = 0;
     this->insert = FreqCollection_insert;
     this->free = FreqCollection_free;
+    this->freeFinal = FreqCollection_freeFinal;
 }

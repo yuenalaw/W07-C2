@@ -10,7 +10,8 @@ struct FreqCollection {
     //FreqCollection_insert insert;
     FrequencyRecord *last;
     int uniqueWords;
-    void (*free) (FrequencyRecord *);
+    void (*free) (FreqCollection*,FrequencyRecord*);
+    void (*freeFinal) (FreqCollection*);
 };
 
 // typedef void (*FreqCollection_insert)(FreqCollection*,char*,FreqCollection*);
