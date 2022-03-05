@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
-#include <string.h>
 
 void writeData(FILE *fp, FreqCollection *fc) {
     fprintf(fp,"Word, Frequency\n");
@@ -124,6 +123,6 @@ int main(int argc, char **argv) {
     readFile(filenameR,collection);
     //writeToFile(filenameW, collection);
     printData(collection);
-    collection->free(collection,collection->head);
+    //collection->free(collection,collection->head);
     collection->freeFinal(collection);
 }

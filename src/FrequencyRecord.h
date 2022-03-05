@@ -30,6 +30,7 @@ struct FrequencyRecord {
     FrequencyRecord* (*getChild)(FrequencyRecord*,char);
     void (*createWord)(FrequencyRecord*,char *);
     void (*free)(FrequencyRecord*);
+    void (*printDetails)(FrequencyRecord*);
 
 };
 

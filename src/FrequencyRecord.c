@@ -60,6 +60,10 @@ static void FrequencyRecord_free(FrequencyRecord *this) {
     free(this);
 }
 
+static void FrequencyRecord_printDetails(FrequencyRecord *this) {
+    printf("Record (letter = %c, is a word = %i, number of children = %i)\n",this->getLetter(this),this->isWord, this->childrenSize);
+}
+
 //non-static ("public") constructor
 FrequencyRecord *new_FrequencyRecord(char letter){
     FrequencyRecord *this = malloc(sizeof(FrequencyRecord));
@@ -80,4 +84,5 @@ void init_FrequencyRecord(FrequencyRecord *this, char letter) {
     this->next=NULL;
     this->frequency = 0;
     this->free = FrequencyRecord_free;
+    this->printDetails = FrequencyRecord_printDetails;
 }

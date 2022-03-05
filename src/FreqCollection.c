@@ -50,8 +50,9 @@ static void FreqCollection_insert(FreqCollection *this, char* word, int wordSize
 
 static void FreqCollection_free(FreqCollection *this,FrequencyRecord* fr){
     int childrenSize = fr->childrenSize;
-    if (childrenSize == 0){ //end of graph
+    if (childrenSize == 0 && fr != NULL){ //end of graph
         fr->free(fr);
+        fr = NULL;
         return;
     }
     for (int i=0;i<childrenSize;i++){
