@@ -24,17 +24,18 @@ static void FrequencyRecord_setChild(FrequencyRecord *parent,FrequencyRecord *ne
 }
 
 /* assume there is an "isChild" check before calling this funciton */
+/* method loops through all children nodes and compares the letters, using getter function "getLetter" */
 static FrequencyRecord* FrequencyRecord_getChild(FrequencyRecord *parent, char letter) {
     int childrenSize = ((FrequencyRecord*)parent)->childrenSize;
     for (int i=0;i<childrenSize;i++){
         if (((FrequencyRecord*)parent)->children[i]->getLetter(((FrequencyRecord*)parent)->children[i]) == letter){
-            //FrequencyRecord *child = malloc(sizeof parent->children[i]); //remember to free this!
             return parent->children[i];
         }
     }
     return NULL;
 }
 
+/* method loops through all children and compares each letter */
 static int FrequencyRecord_isChild(FrequencyRecord *parent,char letter){
     int childrenSize = ((FrequencyRecord*)parent)->childrenSize;
     for (int i=0;i<childrenSize;i++){
@@ -45,19 +46,20 @@ static int FrequencyRecord_isChild(FrequencyRecord *parent,char letter){
     return 0;
 }
 
+/* uses strcpy that sets the word for this record */
 static void FrequencyRecord_createWord(FrequencyRecord *this,char userWord[]) {
-    //((FrequencyRecord*)this)->record->wordStruct->frequency = 0;
-    //((FrequencyRecord*)this)->record->wordStruct->word = userWord;
     strcpy(this->word,userWord);
     ((FrequencyRecord*)this)->setIsWord(this,1);
 }
 
 static void FrequencyRecord_free(FrequencyRecord *this) {
     //use of strcpy for the word, which made use of malloc. 
-    if (this->isWord == 1){
-        free(((FrequencyRecord*)this)->word);
+    if (this != NULL){
+        // if (this->isWord == 1){
+        //     free(this->word);
+        // }
+        free(this);
     }
-    free(this);
 }
 
 static void FrequencyRecord_printDetails(FrequencyRecord *this) {

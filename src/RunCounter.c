@@ -45,7 +45,6 @@ void printData(FreqCollection *fc) {
     int numUniqueWords = fc->uniqueWords;
     int currWord = 0;
     while (currWord <= numUniqueWords) {
-        //fprintf(fp,"%s, %d",curr->record->wordStruct->word,curr->record->wordStruct->frequency);
         printf("%s, %d\n",curr->word,curr->frequency);
         currWord += 1;
         //check if the curr is the last word
@@ -123,6 +122,6 @@ int main(int argc, char **argv) {
     readFile(filenameR,collection);
     //writeToFile(filenameW, collection);
     printData(collection);
-    //collection->free(collection,collection->head);
+    collection->free(collection,collection->head);
     collection->freeFinal(collection);
 }

@@ -17,7 +17,7 @@ only if it's a word, do we insert to collection
 
 static void FreqCollection_insert(FreqCollection *this, char* word, int wordSize){
 
-    //traverse the graph
+    //start of traversal
     FrequencyRecord *prev = this->head;
 
     for (int i=0; i<wordSize; i++) {
@@ -39,7 +39,6 @@ static void FreqCollection_insert(FreqCollection *this, char* word, int wordSize
                 this->last = childNode;
                 this->uniqueWords++;
                 childNode->createWord(childNode,word);
-                //strdup creates a malloc!
             }
             ++childNode->frequency;
         }
@@ -50,13 +49,13 @@ static void FreqCollection_insert(FreqCollection *this, char* word, int wordSize
 
 static void FreqCollection_free(FreqCollection *this,FrequencyRecord* fr){
     int childrenSize = fr->childrenSize;
-    if (childrenSize == 0 && fr != NULL){ //end of graph
+    if (childrenSize == 0 && fr != NULL){ //end of graph (child node), and the record is not null
         fr->free(fr);
-        fr = NULL;
         return;
     }
     for (int i=0;i<childrenSize;i++){
         this->free(this,fr->children[i]);
+        fr->children[i] = NULL;
     }
 }
 
