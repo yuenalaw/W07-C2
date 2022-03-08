@@ -22,4 +22,9 @@ int main(void) {
     /* checking if we can get child */
     FrequencyRecord *attemptGetChild = fr->getChild(fr,childLetters[0]);
     attemptGetChild->printDetails(attemptGetChild);
+
+    /* adding two children */
+    FrequencyRecord *secondFr = new_FrequencyRecord('c');
+    fr->setChild(fr,secondFr);
+    fr->printDetails(fr);
 }
